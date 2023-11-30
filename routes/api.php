@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/testamento',[TestamentoController::class,'index']);
-Route::get('/testamento/{id}',[TestamentoController::class,'show']);
-Route::put('/testamento/{id}',[TestamentoController::class,'update']);
-Route::delete('/testamento/{id}',[TestamentoController::class,'destroy']);
-Route::post('/testamento',[TestamentoController::class,'store']);
+Route::get('/testamento', [TestamentoController::class, 'index']);
+Route::get('/testamento/{id}', [TestamentoController::class, 'show']);
+Route::put('/testamento/{id}', [TestamentoController::class, 'update']);
+Route::delete('/testamento/{id}', [TestamentoController::class, 'destroy']);
+Route::post('/testamento', [TestamentoController::class, 'store']);
 
 // Route::get('/livro',[LivroController::class,'index']);
 // Route::get('/livro/{id}',[LivroController::class,'show']);
@@ -48,8 +48,14 @@ Route::apiResources([
     'testamento' => TestamentoController::class,
 ]);
 
-Route::post('/register',[AuthController::class,'register']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::apiResources([
+        'testamento' => TestamentoController::class,
+        'livro' => LivroController::class,
+        'versiculo' => VersiculoController::class,
+    ]);
 });
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
