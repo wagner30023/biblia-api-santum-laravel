@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\Sanctum;
 
 class AuthController extends Controller
 {
@@ -58,5 +59,15 @@ class AuthController extends Controller
         ];
 
         return response($response,201);
+    }
+
+    public function logout(Request $request)
+    {
+        auth()->user()->tokens()->delete();
+        // Sanctum::personalAccessTokenModel()->where('tokenable_id', auth()->id())->delete();
+
+        return response([
+            'message' => 'Deslogado com sucesso',
+        ],200);
     }
 }

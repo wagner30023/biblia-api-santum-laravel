@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         'livro' => LivroController::class,
         'versiculo' => VersiculoController::class,
     ]);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);
