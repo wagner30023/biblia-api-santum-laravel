@@ -45,7 +45,12 @@ class VersiculoController extends Controller
     public function show($versiculo)
     {
         try {
-            return Versiculo::findOrFail($versiculo);
+            $versiculo =  Versiculo::find($versiculo);
+            if ($versiculo) {
+                $versiculo->livro; // relacionamento que quero trazer na resposta
+                // dd($response);
+                return $versiculo;
+            }
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -84,7 +89,7 @@ class VersiculoController extends Controller
         try {
             $data = Versiculo::destroy($versiculo);
             return response()->json(['registro atualizado com sucesso', 'data' => $data], 201);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }

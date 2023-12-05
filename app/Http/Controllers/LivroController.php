@@ -58,10 +58,15 @@ class LivroController extends Controller
     public function show($livro)
     {
         try {
-            $data = Livro::find($livro);
+            $livro = Livro::find($livro);
+            // $data = Livro::with('testamento')->find($livro);
 
-            if ($data) {
-                return $data;
+            if ($livro) {
+                $livro->testamento;
+                $livro->versiculo;
+
+                // dd($response);
+                return $livro;
             }
 
             return response()->json([
@@ -90,7 +95,6 @@ class LivroController extends Controller
             }
 
             return response()->json(['Erro ao tentado atualizar.', 404]);
-
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -106,7 +110,7 @@ class LivroController extends Controller
     {
         try {
             $data = Livro::destroy($livro);
-            if($data){
+            if ($data) {
                 return response()->json(['dado excluído com sucesso', 'data' => $data], 201);
             }
 

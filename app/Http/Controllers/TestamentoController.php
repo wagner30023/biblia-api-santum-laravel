@@ -15,7 +15,7 @@ class TestamentoController extends Controller
      */
     public function index()
     {
-        try{
+        try {
             return Testamento::all();
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -30,7 +30,7 @@ class TestamentoController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $data = $request->all();
             return Testamento::create($data);
         } catch (\Exception $e) {
@@ -46,8 +46,20 @@ class TestamentoController extends Controller
      */
     public function show($testamento)
     {
-        try{
-            return Testamento::findOrFail($testamento);
+        try {
+            $testamento = Testamento::with('livros')->find($testamento);
+
+            if ($testamento) {
+                $response = [
+                    'testamento' => $testamento,
+                    'livros' => $testamento->livros
+                ];
+                return $response;
+            }
+
+            return response()->json([
+                'message' => 'Erro ao pesquisar o testamento'
+            ],404);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -65,8 +77,8 @@ class TestamentoController extends Controller
         try {
             $data = Testamento::findOrFail($testamento);
             $data->update($request->all());
-            return response()->json(['dado atulizado com sucesso', 'data' => $data],200);
-        } catch(\Exception $e) {
+            return response()->json(['dado atulizado com sucesso', 'data' => $data], 200);
+        } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
@@ -81,8 +93,8 @@ class TestamentoController extends Controller
     {
         try {
             $data = Testamento::destroy($testamento);
-            return response()->json(['dado deletado com sucesso','data' => $data],200);
-        } catch (\Exception $e){
+            return response()->json(['dado deletado com sucesso', 'data' => $data], 200);
+        } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
